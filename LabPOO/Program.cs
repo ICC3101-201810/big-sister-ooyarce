@@ -9,9 +9,41 @@ namespace LabPOO
 {
     class Program
     {
+        public delegate bool Checkin(List<Product> List ,List<Product>List2);
         public static List<Product> cart;
         public static List<Product> market;
-
+        public static List<Product> mind;
+        public event Checkin SisterCheck;
+        public bool CheckPro(List<Product> Lister, List<Product> List2)
+        {
+            for (int i = 0; i < Lister.Count; i++)
+            {
+                for (int j = 0; j < List2.Count; j++)
+                {
+                    if (j == List2.Count - 1 && Lister[i] != List2[j])
+                    {
+                        Console.WriteLine("El producto " + Lister[i].Name + "no se encuentra en el carrito");
+                        return false;
+                    }
+                    if (Lister[i] == List2[j])
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        List2[j].Remove(List2, j);
+                        continue;
+                    }
+                }
+            }
+            Console.WriteLine("Todos los productos requeridos se encuentran en el carro, suprimimos los que sobraban.");
+            return true;
+        }
+        public void Tool()
+        {
+            SisterCheck += new Checkin(this.CheckPro);
+            SisterCheck(mind,cart);
+        }
         static void Main(string[] args)
         {
             cart = new List<Product>();
@@ -85,6 +117,7 @@ namespace LabPOO
             }
             while (true)
             {
+             
                 try
                 {
                     int answer = Convert.ToInt32(Console.ReadLine());
@@ -92,6 +125,7 @@ namespace LabPOO
                     {
                         continue;
                     }
+                    
                     AddToCart(market[answer]);
                     break;
                 }
@@ -133,7 +167,10 @@ namespace LabPOO
         {
             return product.Agregar(cart);
         }
-
+        public static bool AddToMind(Product product)
+        {
+            return product.Agregar(mind);
+        }
         public static void SupplyStore()
         {
             market.Add(new Product("Leche Entera", 820, 89, "1L"));
@@ -165,6 +202,7 @@ namespace LabPOO
         {
             Console.Clear();
             Console.WriteLine("\t\t===> Lasagne alla bolognese <===\n");
+            AddToMind(new Product("Láminas de Lasaña", 1250, 85, "400g"));
             Console.WriteLine("Ingredientes básicos:");
             Console.WriteLine("\t12 láminas de Lasaña");
             Console.WriteLine("\t70 gramos de parmesano rallado");

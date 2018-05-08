@@ -31,7 +31,10 @@ namespace LabPOO
             }
             return false;
         }
-
+        public void Remove(List<Product> carrito,int i )
+        {
+            carrito.RemoveAt(i);
+        }
         public string Name { get => name; }
         public int Stock { get => stock; }
         public int Price { get => price; }
